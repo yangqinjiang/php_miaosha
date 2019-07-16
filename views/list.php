@@ -1,3 +1,4 @@
+
 <?php include TEMPLATE_PATH . "/common/header.php"; ?>
 <?php include TEMPLATE_PATH . "/common/navigation.php"; ?>
 <div class="container-fluid">

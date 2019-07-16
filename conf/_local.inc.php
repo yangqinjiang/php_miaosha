@@ -25,3 +25,34 @@ define('TEMPLATE_PATH', ROOT_PATH . '/views');
 /*---------------------------项目级别常量开始---------------------------------*/
 define('AUTH_COOKIE_NAME', 'miaosha_auth');
 
+define('ENV_PREFIX','miaosha_env');
+
+initEnv(ROOT_PATH,ENV_PREFIX);
+//解释根目录下的.env
+function initEnv($root_path,$env_prefix){
+    
+    if (is_file($root_path . '.env')) {
+        $env = parse_ini_file($root_path . '.env', true);
+        
+        foreach ($env as $key => $val) {
+
+            $name = $env_prefix . strtoupper($key);
+            
+            if (is_array($val)) {
+                foreach ($val as $k => $v) {
+                    $item = $name . '_' . strtoupper($k);
+                    putenv("$item=$v");
+                }
+            } else {
+                putenv("$name=$val");
+                //加入这一句
+                $_ENV[$name]=$val;
+            }
+        }
+    } 
+}
+//自定义的获取环境变量函数
+function MyGetEnv($key,$default='')
+{
+    return getenv(ENV_PREFIX.$key) ? getenv(ENV_PREFIX.$key) : $default;
+}
