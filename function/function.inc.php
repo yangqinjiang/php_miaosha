@@ -15,7 +15,7 @@ function create_sign($params = null)
 	if ($params && is_array($params))
 	{
 		ksort($params);
-		$str = '2017_miaosha';
+		$str = MyGetEnv('SIGN_STR1','default_sign');//从.env读取
 		foreach ($params as $key => $value)
 		{
 			if ($key != 'sign')
