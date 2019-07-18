@@ -85,7 +85,7 @@ if ('buy_cart' != $action) {
     $num = $_POST['num'];
     $goods = $_POST['goods'];
 }
-
+//TODO: 管理后台上架秒杀活动时, 填写redis的数据 st_a_xxxx,info_g_xxx
 $redis_obj = \common\Datasource::getRedis('instance1');
 $d_list = array(
     'u_trade_' . $uid . '_' . $active_id,
@@ -100,16 +100,18 @@ foreach ($goods as $i => $goods_id) {
     $d_list[] = 'info_g_' . $goods_id;  // 商品详情
 }
 $data_list = $redis_obj->mget($d_list);
-// 4 验证用户是否已经购买
+// 4 验证用户是否已经购买,  u_trade_$uid_$active_id
 if ($data_list[0]) {
     $result = array('error_no' => '104', 'error_msg' => '请不要重复提交订单');
     show_result($result);
 }
-// 5 验证活动信息，商品信息是否正常
+// 5 验证活动信息，商品信息是否正常, st_a_$active_id
+//判断状态,时间
 if ($data_list[1]) {
     $result = array('error_no' => '105', 'error_msg' => '活动信息异常');
     show_result($result);
 }
+//清除前两个数据
 unset($data_list[0]);
 unset($data_list[1]);
 /*
@@ -142,6 +144,7 @@ $trade_goods = array();
 foreach ($data_list as $i => $goods_info) {
     $goods_num = $nums[$i - 2];
 //    $goods_info = $goods_model->get($goods_id);
+    //
     if (!$goods_info || $goods_info['sys_status'] !== '1') {
         $result = array('error_no' => '106', 'error_msg' => '商品信息异常');
         show_result($result);
