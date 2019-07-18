@@ -21,6 +21,7 @@ $ask = $_POST['ask'];
 $answer = $_POST['answer'];
 $action = isset($_POST['action']) ? $_POST['action'] : false;
 
+//加入购买车??
 if ('buy_cart' == $action) {
     $goods_num = $_POST['num'][0];
 }
@@ -82,7 +83,8 @@ if ('buy_cart' != $action) {
     $nums = array($goods_num);
     $goods = array($goods_id);
 } else {
-    $num = $_POST['num'];
+    //加入购物车??
+    $nums = $_POST['num'];
     $goods = $_POST['goods'];
 }
 //TODO: 管理后台上架秒杀活动时, 填写redis的数据 st_a_xxxx,info_g_xxx
